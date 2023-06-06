@@ -1107,7 +1107,7 @@ which ports are required to be open on your machine.
 
 Once you start the Light Node, a wallet key will be generated for you.
 You will need to fund that address with Mocha Testnet or Arabica Devnet
-tokens to pay for `PayForData` transactions or `PayForBlob transactions`, respectively.
+tokens to pay for `PayForBlob` transactions or `PayForBlob transactions`, respectively.
 
 You can find the address by running the following command in
 the `celestia-node` directory:
@@ -1545,14 +1545,14 @@ The output here is base64-encoded.
 </TabItem>
 <TabItem value="mocha" label="Mocha">
 
-### Submit a PFD transaction
+### Submit a PFB transaction
 
-In this example, we will be submitting a `PayForData`
-transaction to the node's `/submit_pfd` endpoint.
+In this example, we will be submitting a `PayForBlob`
+transaction to the node's `/submit_pfb` endpoint.
 
 Some things to consider:
 
-- PFD is a `PayForData` Message.
+- PFB is a `PayForBlob` Message.
 - The endpoint also takes in a `namespace_id` and `data` values.
 - Namespace ID should be 8 bytes.
 - Data is in hex-encoded bytes of the raw message.
@@ -1566,20 +1566,20 @@ useful Golang Playground we created [here](https://go.dev/play/p/7ltvaj8lhRl).
 
 :::caution
 When running a Celestia node, you will need to use the following flags
-when starting your node to submit a PFD:
+when starting your node to submit a PFB:
 
 - the `--core.ip string` flag, to allow you to submit transactions
 to your node
 - the `--gateway`, `--gateway.addr string`,
 and `--gateway.port string`, to open the gateway
-and allow anyone to use your IP as an endpoint to submit PFDs
+and allow anyone to use your IP as an endpoint to submit PFBs
 :::
 We run the following:
 
 ```sh
 curl -X POST -d '{"namespace_id": "0c204d39600fddd3",
   "data": "f1f20ca8007e910a3bf8b2e61da0f26bca07ef78717a6ea54165f5",
-  "gas_limit": 80000, "fee": 2000}' http://localhost:26659/submit_pfd
+  "gas_limit": 80000, "fee": 2000}' http://localhost:26659/submit_pfb
 ```
 
 We get the following output:
@@ -1589,7 +1589,7 @@ We get the following output:
    "height":2452,
    "txhash":"04A79AF9DA62FDB41ACD7D82EB0B9004AE4E4ED603B280A65816560B4F38A999",
    "data":"12200A1E2F7061796D656E742E4D7367506179466F7244617461526573706F6E7365",
-   "raw_log":"[{\"msg_index\":0,\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/payment.MsgPayForData\"}]},{\"type\":\"payfordata\",\"attributes\":[{\"key\":\"signer\",\"value\":\"celestia1vdjkcetnw35kzvtgxvmxwmnwwaaxuet4xp3hxut6dce8wctsdq6hjwfcxd5xvvmyddsh5mnvvaaq6776xw\"},{\"key\":\"size\",\"value\":\"27\"}]}]}]",
+   "raw_log":"[{\"msg_index\":0,\"events\":[{\"type\":\"message\",\"attributes\":[{\"key\":\"action\",\"value\":\"/payment.MsgPayForBlob\"}]},{\"type\":\"payforblobs\",\"attributes\":[{\"key\":\"signer\",\"value\":\"celestia1vdjkcetnw35kzvtgxvmxwmnwwaaxuet4xp3hxut6dce8wctsdq6hjwfcxd5xvvmyddsh5mnvvaaq6776xw\"},{\"key\":\"size\",\"value\":\"27\"}]}]}]",
    "logs":[
       {
          "msg_index":0,
@@ -1599,12 +1599,12 @@ We get the following output:
                "attributes":[
                   {
                      "key":"action",
-                     "value":"/payment.MsgPayForData"
+                     "value":"/payment.MsgPayForBlobs"
                   }
                ]
             },
             {
-               "type":"payfordata",
+               "type":"payforblobs",
                "attributes":[
                   {
                      "key":"signer",
@@ -1775,13 +1775,13 @@ We get the following output:
          "attributes":[
             {
                "key":"action",
-               "value":"/payment.MsgPayForData",
+               "value":"/payment.MsgPayForBlobs",
                "index":true
             }
          ]
       },
       {
-         "type":"payfordata",
+         "type":"payforblobs",
          "attributes":[
             {
                "key":"signer",
@@ -1813,16 +1813,16 @@ If you encounter an error like:
 "rpc error: code = NotFound desc = account celestia1krkle0n547u0znz3unnln8paft2dq4z3rznv86 not found"
 ```
 
-It is possible that the account you are trying to submit a `PayForData` from
+It is possible that the account you are trying to submit a `PayForBlob` from
 doesn't have testnet tokens yet. Ensure the testnet faucet has funded your
 account with tokens and then try again.
 
 ### Get namespaced shares by block height
 
-After submitting your PFD transaction, upon success, the node will return
-the block height for which the PFD transaction was included. You can then
+After submitting your PFB transaction, upon success, the node will return
+the block height for which the PFB transaction was included. You can then
 use that block height and the namespace ID with which you submitted your
-PFD transaction to get your message [shares](../node-gateway-docs#share-endpoints) returned to you. In this example,
+PFB transaction to get your message [shares](../node-gateway-docs#share-endpoints) returned to you. In this example,
 the block height we got was 2452 which we will use for the following command.
 Read more about shares in the [Celestia Specs](https://celestiaorg.github.io/celestia-specs/latest/specs/data_structures.html?highlight=shares#share).
 
